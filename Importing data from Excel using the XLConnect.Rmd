@@ -1,0 +1,65 @@
+---
+title: "Importing data from Excel using XLConnect"
+author: "Huruy Belay"
+date: "June 28, 2017"
+output: html_document
+---
+```{r, message=FALSE}
+library(XLConnect)
+```
+
+We can import excel data to R and analyzed the whole data in R using read_excel. However, if we force to do our analysis in excel but you want to do your analysis in R, I am happy to share you that there is a way to connect the excel data to R using XLConnect.
+
+The following are the steps to connect the: excel to R:
+
+#### Step-1: To connect to the excel 
+
+```{r}
+data<-loadWorkbook("summary.xlsx")
+```
+
+* We can read the sheets of the excel
+
+```{r}
+getSheets(data)
+```
+
+#### Step-2: Reading the data from the sheet we want
+
+To read from each table we will use the following R programs. We can call the sheet number or the sheet name.
+
+```{r}
+sheet1 <- readWorksheet(data, sheet = 1) # or sheet1 <- readWorksheet(data, sheet = "1960-1966") 
+sheet2 <- readWorksheet(data, sheet = 2)
+sheet3 <- readWorksheet(data, sheet = 3)
+sheet4 <- readWorksheet(data, sheet = 4)
+```
+
+After reading our data, we can manipulate the following:
+
+#### Step-3: creating new variable
+
+```{r}
+createSheet(data, "new")
+```
+
+#### Step-4: Creating data in the new created sheet
+
+```{r}
+Ind <- data.frame(pop1= c(100000,21000000, 3000000))
+writeWorksheet(data, Ind, sheet = "new")
+saveWorkbook(data, file = "new_data.xlsx")
+```
+
+#### Step-5: Renaming sheet
+
+```{r}
+renameSheet(data, "1960-1966", "sheet_1")
+saveWorkbook(data, file = "new.xlsx")
+```
+
+#### Step-6: Removing sheet
+
+```{r}
+removeSheet(data, sheet = "newsheet_1")
+saveWorkbook(data, file = "new1.xlsx")
